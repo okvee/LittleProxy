@@ -67,7 +67,3 @@ server.start();
 If you have questions, please visit our Google Group here:
 
 https://groups.google.com/forum/#!forum/littleproxy
-
-The main LittleProxy page is here:
-
-http://www.littleshoot.org/littleproxy/
