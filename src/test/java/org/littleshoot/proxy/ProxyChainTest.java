@@ -17,9 +17,9 @@ public class ProxyChainTest {
 
     private static final int WEB_SERVER_PORT = 1080;
     private static final HttpHost WEB_SERVER_HOST = new HttpHost("localhost", WEB_SERVER_PORT);
-    private static final int PROXY_PORT = 8081;
-    private static final String PROXY_HOST_AND_PORT = "localhost:8081";
-    private static final int ANOTHER_PROXY_PORT = 8082;
+    private static final int PROXY_PORT = HttpProxyTest.PROXY_PORT;
+    private static final String PROXY_HOST_AND_PORT = "localhost:" + PROXY_PORT;
+    private static final int ANOTHER_PROXY_PORT = 1082;
 
     private Server webServer;
     private HttpProxyServer proxyServer;
