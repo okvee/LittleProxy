@@ -116,6 +116,8 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
      */
     private final String proxyAlias;
 
+    private final boolean fullyLocalMode;
+
     /**
      * True when the proxy has already been stopped by calling {@link #stop()} or {@link #abort()}.
      */
@@ -240,7 +242,8 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
             long readThrottleBytesPerSecond,
             long writeThrottleBytesPerSecond,
             InetSocketAddress localAddress,
-            String proxyAlias) {
+            String proxyAlias,
+            boolean fullyLocalMode) {
         this.serverGroup = serverGroup;
         this.transportProtocol = transportProtocol;
         this.requestedAddress = requestedAddress;
@@ -275,6 +278,8 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
         } else {
             this.proxyAlias = proxyAlias;
         }
+
+        this.fullyLocalMode = fullyLocalMode;
     }
 
     /**
@@ -545,6 +550,9 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
         return proxyAlias;
     }
 
+    public boolean isFullyLocalMode() {
+        return fullyLocalMode;
+    }
 
     protected EventLoopGroup getProxyToServerWorkerFor(TransportProtocol transportProtocol) {
         return serverGroup.getProxyToServerWorkerPoolForTransport(transportProtocol);
@@ -573,6 +581,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
         private long writeThrottleBytesPerSecond;
         private InetSocketAddress localAddress;
         private String proxyAlias;
+        private boolean fullyLocalMode;
         private int clientToProxyAcceptorThreads = ServerGroup.DEFAULT_INCOMING_ACCEPTOR_THREADS;
         private int clientToProxyWorkerThreads = ServerGroup.DEFAULT_INCOMING_WORKER_THREADS;
         private int proxyToServerWorkerThreads = ServerGroup.DEFAULT_OUTGOING_WORKER_THREADS;
@@ -666,6 +675,12 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
         @Override
         public HttpProxyServerBootstrap withProxyAlias(String alias) {
             this.proxyAlias = alias;
+            return this;
+        }
+
+        @Override
+        public HttpProxyServerBootstrap withFullyLocalMode(boolean fullyLocalMode) {
+            this.fullyLocalMode = fullyLocalMode;
             return this;
         }
 
@@ -817,7 +832,7 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
                     filtersSource, transparent,
                     idleConnectionTimeout, activityTrackers, connectTimeout,
                     serverResolver, readThrottleBytesPerSecond, writeThrottleBytesPerSecond,
-                    localAddress, proxyAlias);
+                    localAddress, proxyAlias, fullyLocalMode);
         }
 
         private InetSocketAddress determineListenAddress() {

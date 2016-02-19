@@ -303,6 +303,15 @@ public interface HttpProxyServerBootstrap {
     HttpProxyServerBootstrap withProxyAlias(String alias);
 
     /**
+     * Specify whether or not this proxy server will be running in fully local mode,
+     * meaning that it won't attempt to open connections to HTTPS server on CONNECT
+     * requests.
+     * @param fullyLocalMode
+     * @return
+     */
+    HttpProxyServerBootstrap withFullyLocalMode(boolean fullyLocalMode);
+
+    /**
      * <p>
      * Build and starts the server.
      * </p>

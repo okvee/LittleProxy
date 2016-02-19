@@ -546,11 +546,9 @@ public class ProxyToServerConnection extends ProxyConnection<HttpResponse> {
      */
     private void initializeConnectionFlow() {
         connectionFlow = new ConnectionFlow(clientConnection, this, connectLock);
-        if (remoteAddress.isUnresolved() && isMitmEnabled() && ProxyUtils.isCONNECT(initialRequest)) {
-            // A caching proxy needs to install a HostResolver which returns
-            // unresolved addresses in off line mode. So, an unresolved address
-            // here means a cached response is requested. Don't connect/encrypt
-            // a channel to the upstream proxy or server.
+        if (proxyServer.isFullyLocalMode() && ProxyUtils.isCONNECT(initialRequest)) {
+            // Don't connect/encrypt a channel to the upstream proxy or server
+            // if fully-local-mode switch is on
             connectionFlow.then(clientConnection.RespondCONNECTSuccessful);
             connectionFlow.then(serverConnection.MitmEncryptClientChannel);
         } else {
